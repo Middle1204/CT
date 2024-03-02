@@ -1,5 +1,34 @@
 #include <stdio.h>
 
+int calculatePrize(int rd[]) {
+    int count[7] = {0};
+    for (int i = 0; i < 3; i++) {
+        count[rd[i]]++;
+    }
+
+    int maxCount = 0;
+    int maxFace = 0;
+
+    for (int i = 1; i <= 6; i++) {
+        if (count[i] == 3) {
+            return 10000 + i * 1000;
+        }
+        else if (count[i] == 2) {
+            maxFace = i;
+        }
+        else if (count[i] == 1 && i > maxFace) {
+            maxFace = i;
+        }
+    }
+
+    if (maxFace != 0) {
+        return 1000 + maxFace * 100;
+    }
+    else {
+        return rd[2] * 100;
+    }
+}
+
 int main() {
     int N;
     scanf("%d", &N);
@@ -10,20 +39,7 @@ int main() {
         int rd[3];
         scanf("%d %d %d", &rd[0], &rd[1], &rd[2]);
 
-        int prize = 0;
-
-        if (rd[0] == rd[1] && rd[1] == rd[2]) {
-            prize = 10000 + rd[0] * 1000;
-        }
-
-        else if (rd[0] == rd[1] || rd[1] == rd[2] || rd[0] == rd[2]) {
-            prize = 1000 + rd[1] * 100;
-        }
-
-        else {
-            int maxrd = (rd[0] > rd[1]) ? ((rd[0] > rd[2]) ? rd[0] : rd[2]) : ((rd[1] > rd[2]) ? rd[1] : rd[2]);
-            prize = maxrd * 100;
-        }
+        int prize = calculatePrize(rd);
 
         if (prize > maxPrize) {
             maxPrize = prize;
